@@ -54,6 +54,8 @@ private:
 
 	void TraceForHits();
 
+	void ExecuteHitCue(AActor* Target, const FHitResult& Hit) const;
+
 	/** Actors already hit by this swing, so one swing never damages the same target twice. */
 	UPROPERTY()
 	TSet<TObjectPtr<AActor>> HitActors;
