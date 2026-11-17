@@ -6,6 +6,7 @@
 #include "AbilityForgePlayerState.generated.h"
 
 class UAbilitySystemComponent;
+class UAbilityForgeAttributeSet;
 
 /**
  * Owns the Ability System Component, so abilities, effects and attributes
@@ -21,7 +22,12 @@ public:
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
+	UAbilityForgeAttributeSet* GetAttributeSet() const { return AttributeSet; }
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilityForge")
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+
+	UPROPERTY()
+	TObjectPtr<UAbilityForgeAttributeSet> AttributeSet;
 };
