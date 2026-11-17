@@ -11,3 +11,7 @@ Put new assets under `Content/GAS/` (`Effects`, `Abilities`, `Cues`, `UI`, `Data
 3. Press Play, open the console (`` ` ``) and run `showdebug abilitysystem`. The ASC owner should be the PlayerState and the avatar should be the character.
 
 If the Output Log shows *"set the Game Mode's Player State Class to AbilityForgePlayerState"*, step 2 is missing.
+
+## Section 3: Attributes
+
+No editor steps. Play and run `showdebug abilitysystem`. Health, MaxHealth, Stamina and MaxStamina show 100, the defaults from the Attribute Set constructor.
