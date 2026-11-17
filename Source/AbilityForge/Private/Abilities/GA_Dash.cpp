@@ -3,9 +3,19 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "TimerManager.h"
+#include "Core/AbilityForgeGameplayTags.h"
 
 UGA_Dash::UGA_Dash()
 {
+	FGameplayTagContainer DashAssetTags;
+	DashAssetTags.AddTag(AbilityForgeTags::Ability_Dash);
+	SetAssetTags(DashAssetTags);
+
+	// Applied to the owner while the dash is active.
+	ActivationOwnedTags.AddTag(AbilityForgeTags::State_Dashing);
+
+	// The dash can't start while the owner has any of these.
+	ActivationBlockedTags.AddTag(AbilityForgeTags::State_Stunned);
 }
 
 bool UGA_Dash::CanActivateAbility(
