@@ -76,3 +76,16 @@ Test: attack the dummy. Its health text drops by the curve value for your level.
 3. `BP_ThirdPersonCharacter`: set **HUD Widget Class** to `WBP_HUD`.
 
 Test: the cue plays on every hit, and the stamina bar drops on each dash.
+
+## Section 9: Multiplayer essentials
+
+1. In the Play settings, set **Number of Players** to 2 and **Net Mode** to **Play As Listen Server**. Then test again with **Play As Client** (dedicated server).
+2. Check on both windows:
+   - Dash is smooth on the client that presses it (prediction), and the other window sees it.
+   - Melee damage on the dummy is the same in both windows. Only the server traces.
+   - The hit cue plays in both windows.
+   - Each player's HUD shows only their own health and stamina.
+   - Stamina cost and cooldown apply on the client that dashes (Mixed replication sends them to the owner).
+3. Run `showdebug abilitysystem` on the client to compare with the server.
+
+If melee does no damage on a dedicated server, the server isn't ticking the montage, so the hit notify never fires there. Set the character mesh's **Visibility Based Anim Tick Option** to **Always Tick Pose and Refresh Bones**.
