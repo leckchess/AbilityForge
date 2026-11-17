@@ -16,6 +16,7 @@ UGA_Dash::UGA_Dash()
 
 	// The dash can't start while the owner has any of these.
 	ActivationBlockedTags.AddTag(AbilityForgeTags::State_Stunned);
+	ActivationBlockedTags.AddTag(AbilityForgeTags::State_Attacking);
 }
 
 bool UGA_Dash::CanActivateAbility(
