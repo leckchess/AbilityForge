@@ -49,3 +49,22 @@ Then:
 Test: each dash costs 20 stamina, and you can't dash again for 1.5 seconds or with less than 20 stamina.
 
 **Assignment 2 (stamina regeneration):** create `GE_StaminaRegen` with **Infinite** duration, **Period** 0.5 s, and one modifier Stamina **Add** `5`. Add it to the character's **Startup Effects**.
+
+## Section 7: Ability Tasks and a melee attack
+
+1. **Damage curve.** Import `Docs/Data/CT_MeleeDamage.csv` into `Content/GAS/Data` as a **Curve Table** (Linear interpolation). Row `MeleeDamage` goes from 10 at level 1 to 30 at level 5.
+2. **Montage.** Right-click `Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_01` and choose **Create > Create AnimMontage**, then move it to `Content/GAS/Abilities/AM_Melee`. Keep the slot `DefaultSlot`.
+3. **Hit timing.** In `AM_Melee`, add a notify of type **Send Gameplay Event** at the impact frame and set its Event Tag to `Event.Melee.Hit`.
+4. **Anim Blueprint.** Open `ABP_Unarmed`. If its AnimGraph has no **Slot 'DefaultSlot'** node before the Output Pose, add one, or montages won't play.
+5. **Input.** Create `IA_Attack` (Digital (bool)) and map it to **Left Mouse Button** in `IMC_Default`.
+6. **Ability.** Create `BP_GA_Melee` (parent `GA_Melee`):
+   - Attack Montage: `AM_Melee`
+   - Damage: Value `1`, Curve `CT_MeleeDamage` / `MeleeDamage`
+   - Damage Effect Class: `GE_Damage`
+   - Turn on **Draw Debug Trace** while recording the trace lecture.
+7. **Grant it.** Add a Startup Abilities entry to `BP_ThirdPersonCharacter`: `BP_GA_Melee` with `IA_Attack`.
+8. **Target.** Create `BP_TrainingDummy` (parent `AbilityForgeTrainingDummy`). Set its Mesh to `SKM_Manny_Simple` and its Anim Class to `ABP_Unarmed`, matching the template character's mesh offset (Z -90, Yaw -90). Place one or two in the level.
+
+Test: attack the dummy. Its health text drops by the curve value for your level. It resets after 2 seconds at 0.
+
+**Assignment 3 (stun):** create `GE_Stun` with **Has Duration** 1.5 s and **Grant Tags to Target Actor** `State.Stunned`. While stunned, Dash and Melee can't activate. The solution branch adds an **On Hit Effect Class** to `GA_Melee` for it.
