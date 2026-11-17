@@ -29,3 +29,23 @@ Test: press **Q** on the ground to dash. Jump and press **Q**: nothing happens, 
 ## Section 5: Gameplay Tags
 
 No editor steps. Open **Project Settings > Gameplay Tags** to see the native tags declared in `AbilityForgeGameplayTags.cpp`. While dashing, `showdebug abilitysystem` lists `State.Dashing` on the owner.
+
+## Section 6: Gameplay Effects
+
+Create these Gameplay Effect Blueprints in `Content/GAS/Effects`:
+
+| Asset | Duration Policy | Setup |
+| --- | --- | --- |
+| `GE_InitAttributes` | Instant | Four modifiers, **Override**: MaxHealth 100, Health 100, MaxStamina 100, Stamina 100. Put the Max attributes first. |
+| `GE_Damage` | Instant | One modifier: Health, **Add**, magnitude type **Set By Caller**, tag `Data.Damage` |
+| `GE_DashCost` | Instant | One modifier: Stamina, **Add**, Scalable Float `-20` |
+| `GE_DashCooldown` | Has Duration, 1.5 s | Add the component **Grant Tags to Target Actor** with `Cooldown.Dash` |
+
+Then:
+
+1. `BP_GA_Dash`: set **Costs > Cost Gameplay Effect Class** to `GE_DashCost` and **Cooldowns > Cooldown Gameplay Effect Class** to `GE_DashCooldown`.
+2. `BP_ThirdPersonCharacter`: set **Default Attributes Effect** to `GE_InitAttributes`.
+
+Test: each dash costs 20 stamina, and you can't dash again for 1.5 seconds or with less than 20 stamina.
+
+**Assignment 2 (stamina regeneration):** create `GE_StaminaRegen` with **Infinite** duration, **Period** 0.5 s, and one modifier Stamina **Add** `5`. Add it to the character's **Startup Effects**.
