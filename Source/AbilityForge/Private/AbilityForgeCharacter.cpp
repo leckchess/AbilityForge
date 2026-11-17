@@ -6,6 +6,7 @@
 #include "Core/AbilityForgePlayerState.h"
 #include "Abilities/GameplayAbility.h"
 #include "EnhancedInputComponent.h"
+#include "GameplayEffect.h"
 
 UAbilitySystemComponent* AAbilityForgeCharacter::GetAbilitySystemComponent() const
 {
@@ -18,6 +19,7 @@ void AAbilityForgeCharacter::PossessedBy(AController* NewController)
 
 	InitAbilityActorInfo();
 	GrantStartupAbilities();
+	ApplyStartupEffects();
 }
 
 void AAbilityForgeCharacter::OnRep_PlayerState()
@@ -108,5 +110,37 @@ void AAbilityForgeCharacter::OnAbilityInputReleased(int32 InputID)
 	if (AbilitySystemComponent.IsValid())
 	{
 		AbilitySystemComponent->AbilityLocalInputReleased(InputID);
+	}
+}
+
+void AAbilityForgeCharacter::ApplyStartupEffects()
+{
+	if (!HasAuthority() || !AbilitySystemComponent.IsValid())
+	{
+		return;
+	}
+
+	FGameplayEffectContextHandle Context = AbilitySystemComponent->MakeEffectContext();
+	Context.AddSourceObject(this);
+
+	auto ApplyToSelf = [this, &Context](const TSubclassOf<UGameplayEffect>& EffectClass)
+	{
+		if (!EffectClass)
+		{
+			return;
+		}
+
+		const FGameplayEffectSpecHandle Spec = AbilitySystemComponent->MakeOutgoingSpec(EffectClass, 1.f, Context);
+		if (Spec.IsValid())
+		{
+			AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*Spec.Data.Get());
+		}
+	};
+
+	ApplyToSelf(DefaultAttributesEffect);
+
+	for (const TSubclassOf<UGameplayEffect>& EffectClass : StartupEffects)
+	{
+		ApplyToSelf(EffectClass);
 	}
 }
