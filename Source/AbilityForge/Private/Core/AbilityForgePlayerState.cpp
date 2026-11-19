@@ -2,6 +2,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "Attributes/AbilityForgeAttributeSet.h"
+#include "Net/UnrealNetwork.h"
 
 AAbilityForgePlayerState::AAbilityForgePlayerState()
 {
@@ -21,4 +22,11 @@ AAbilityForgePlayerState::AAbilityForgePlayerState()
 UAbilitySystemComponent* AAbilityForgePlayerState::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void AAbilityForgePlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AAbilityForgePlayerState, CharacterLevel);
 }

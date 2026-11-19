@@ -15,3 +15,13 @@ If the Output Log shows *"set the Game Mode's Player State Class to AbilityForge
 ## Section 3: Attributes
 
 No editor steps. Play and run `showdebug abilitysystem`. Health, MaxHealth, Stamina and MaxStamina show 100, the defaults from the Attribute Set constructor.
+
+## Section 4: Gameplay Abilities
+
+1. Create the input action `Content/Input/Actions/IA_Dash` (Value Type: Digital (bool)).
+2. Open `Content/Input/IMC_Default` and map `IA_Dash` to **Q**.
+3. Create a Blueprint class `Content/Abilities/GA_Dash_BP` with parent `GA_Dash`. You'll set its cost and cooldown in Section 6.
+4. Open `BP_ThirdPersonCharacter`. In **Class Defaults > Abilities > Startup Abilities**, add an entry with Ability `GA_Dash_BP` and Input Action `IA_Dash`.
+5. Optional, for the level-scaling demo later: create `BP_AbilityForgePlayerState` (parent `AbilityForgePlayerState`), set **Character Level**, and use it as the Game Mode's Player State Class.
+
+Test: press **Q** on the ground to dash. Jump and press **Q**: nothing happens, because `CanActivateAbility` refuses while falling.
