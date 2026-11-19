@@ -25,3 +25,7 @@ No editor steps. Play and run `showdebug abilitysystem`. Health, MaxHealth, Stam
 5. Optional, for the level-scaling demo later: create `BP_AbilityForgePlayerState` (parent `AbilityForgePlayerState`), set **Character Level**, and use it as the Game Mode's Player State Class.
 
 Test: press **Q** on the ground to dash. Jump and press **Q**: nothing happens, because `CanActivateAbility` refuses while falling.
+
+## Section 5: Gameplay Tags
+
+No editor steps. Open **Project Settings > Gameplay Tags** to see the native tags declared in `AbilityForgeGameplayTags.cpp`. While dashing, `showdebug abilitysystem` lists `State.Dashing` on the owner.
