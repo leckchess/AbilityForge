@@ -39,6 +39,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Melee")
 	float TraceRadius = 50.f;
 
+	/** Assignment 3: effect applied to each target hit, e.g. a short stun granting State.Stunned. */
+	UPROPERTY(EditDefaultsOnly, Category = "Melee")
+	TSubclassOf<UGameplayEffect> OnHitEffectClass;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Melee|Debug")
 	bool bDrawDebugTrace = false;
 
@@ -55,6 +59,8 @@ private:
 	void TraceForHits();
 
 	void ExecuteHitCue(AActor* Target, const FHitResult& Hit) const;
+
+	void ApplyOnHitEffect(AActor* Target) const;
 
 	/** Actors already hit by this swing, so one swing never damages the same target twice. */
 	UPROPERTY()

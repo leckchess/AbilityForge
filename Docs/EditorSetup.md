@@ -90,3 +90,9 @@ Test: the cue plays on every hit, and the stamina bar drops on each dash.
 3. Run `showdebug abilitysystem` on the client to compare with the server.
 
 If melee does no damage on a dedicated server, the server isn't ticking the montage, so the hit notify never fires there. Set the character mesh's **Visibility Based Anim Tick Option** to **Always Tick Pose and Refresh Bones**.
+
+## Assignment solutions
+
+- **Assignment 1, Sprint:** create `Content/Input/Actions/IA_Sprint` (Digital (bool)) and map it to **Left Shift**. Create `GA_Sprint_BP` (parent `GA_Sprint`) and add it to Startup Abilities with `IA_Sprint`. Releasing the key ends the ability through `InputReleased`.
+- **Assignment 2, stamina regeneration:** `GE_StaminaRegen` as described in Section 6, in the character's Startup Effects.
+- **Assignment 3, stun:** set `GA_Melee_BP` > **On Hit Effect Class** to `GE_Stun`. Test with two players: a stunned player can't dash.

@@ -114,6 +114,7 @@ void UGA_Melee::TraceForHits()
 		if (ApplyDamageToTarget(Target, DamageAmount))
 		{
 			ExecuteHitCue(Target, Hit);
+			ApplyOnHitEffect(Target);
 		}
 	}
 }
@@ -135,4 +136,20 @@ void UGA_Melee::ExecuteHitCue(AActor* Target, const FHitResult& Hit) const
 
 	// Execute is one-shot (no Add/Remove). Called on the server, it plays on every client.
 	TargetASC->ExecuteGameplayCue(AbilityForgeTags::GameplayCue_Hit, CueParams);
+}
+
+void UGA_Melee::ApplyOnHitEffect(AActor* Target) const
+{
+	UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo();
+	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Target);
+	if (!OnHitEffectClass || !SourceASC || !TargetASC)
+	{
+		return;
+	}
+
+	const FGameplayEffectSpecHandle Spec = MakeOutgoingGameplayEffectSpec(OnHitEffectClass, GetAbilityLevel());
+	if (Spec.IsValid())
+	{
+		SourceASC->ApplyGameplayEffectSpecToTarget(*Spec.Data.Get(), TargetASC);
+	}
 }
