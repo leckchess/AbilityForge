@@ -4,6 +4,8 @@
 #include "Abilities/AbilityForgeGameplayAbility.h"
 #include "GA_Dash.generated.h"
 
+class UAnimMontage;
+
 /** Launches the character forward. Only works on the ground. */
 UCLASS()
 class ABILITYFORGE_API UGA_Dash : public UAbilityForgeGameplayAbility
@@ -42,8 +44,18 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Dash")
 	float DashDuration = 0.25f;
 
+	/** Optional. If set, the dash plays it and ends when it finishes, instead of after DashDuration. */
+	UPROPERTY(EditDefaultsOnly, Category = "Dash")
+	TObjectPtr<UAnimMontage> DashMontage;
+
 private:
 	void FinishDash();
+
+	UFUNCTION()
+	void OnDashMontageFinished();
+
+	UFUNCTION()
+	void OnDashMontageCancelled();
 
 	FTimerHandle DashTimerHandle;
 };

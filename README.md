@@ -37,8 +37,8 @@ git checkout section-04
 | `section-04` | Gameplay Abilities | Base ability, startup grants at player level, Enhanced Input activation, Dash with a grounded-only check |
 | `section-05` | Gameplay Tags | Native tags; Dash owns `State.Dashing` and is blocked by `State.Stunned` |
 | `section-06` | Gameplay Effects | Attribute initialization, SetByCaller damage helper, Dash cost and cooldown |
-| `section-07` | Ability Tasks and a melee attack | Melee with PlayMontageAndWait and WaitGameplayEvent, level-scaled damage, training dummy |
-| `section-08` | Gameplay Cues and UI | Hit cue on the target, health and stamina HUD from attribute delegates |
+| `section-07` | Ability Tasks and a melee attack | Melee with PlayMontageAndWait and WaitGameplayEvent, level-scaled damage, training dummy, optional Dash montage |
+| `section-08` | Gameplay Cues and UI | Hit cue on the target, health and stamina HUD from attribute delegates, Gameplay Cue path |
 | `section-09` | Multiplayer essentials | Final project, tested with two clients |
 
 Assignment solutions (Sprint, stamina regeneration, stun on hit) are on the `assignment-solutions` branch, so they don't spoil the checkpoints.
