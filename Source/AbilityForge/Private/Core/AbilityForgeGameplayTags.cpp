@@ -14,4 +14,6 @@ namespace AbilityForgeTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Data_Damage, "Data.Damage", "SetByCaller magnitude for damage effects.");
 
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Event_Melee_Hit, "Event.Melee.Hit", "Sent by the attack montage's anim notify at the impact frame.");
+
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Hit, "GameplayCue.Hit", "Hit feedback played on the target.");
 }

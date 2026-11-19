@@ -7,6 +7,7 @@
 #include "Abilities/GameplayAbility.h"
 #include "EnhancedInputComponent.h"
 #include "GameplayEffect.h"
+#include "UI/AbilityForgeHUDWidget.h"
 
 UAbilitySystemComponent* AAbilityForgeCharacter::GetAbilitySystemComponent() const
 {
@@ -46,6 +47,8 @@ void AAbilityForgeCharacter::InitAbilityActorInfo()
 
 	// Owner = the PlayerState, which keeps the ASC. Avatar = this character, the body in the world.
 	AbilitySystemComponent->InitAbilityActorInfo(AFPlayerState, this);
+
+	CreateHUD();
 }
 
 void AAbilityForgeCharacter::GrantStartupAbilities()
@@ -143,4 +146,47 @@ void AAbilityForgeCharacter::ApplyStartupEffects()
 	{
 		ApplyToSelf(EffectClass);
 	}
+}
+
+void AAbilityForgeCharacter::NotifyControllerChanged()
+{
+	Super::NotifyControllerChanged();
+
+	if (AbilitySystemComponent.IsValid())
+	{
+		CreateHUD();
+	}
+}
+
+void AAbilityForgeCharacter::CreateHUD()
+{
+	// Only the local player sees a HUD, and only once.
+	if (HUDWidget || !HUDWidgetClass || !IsLocallyControlled())
+	{
+		return;
+	}
+
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (!PlayerController)
+	{
+		return;
+	}
+
+	HUDWidget = CreateWidget<UAbilityForgeHUDWidget>(PlayerController, HUDWidgetClass);
+	if (HUDWidget)
+	{
+		HUDWidget->InitializeWithAbilitySystem(AbilitySystemComponent.Get());
+		HUDWidget->AddToViewport();
+	}
+}
+
+void AAbilityForgeCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	if (HUDWidget)
+	{
+		HUDWidget->RemoveFromParent();
+		HUDWidget = nullptr;
+	}
+
+	Super::EndPlay(EndPlayReason);
 }

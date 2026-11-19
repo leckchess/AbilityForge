@@ -11,6 +11,7 @@ class UAbilitySystemComponent;
 class UGameplayAbility;
 class UInputAction;
 class UGameplayEffect;
+class UAbilityForgeHUDWidget;
 
 /** An ability granted at startup, and the input action that activates it. */
 USTRUCT(BlueprintType)
@@ -44,6 +45,9 @@ public:
 	/** Clients: the PlayerState, which owns the ASC, has replicated. */
 	virtual void OnRep_PlayerState() override;
 
+	/** Owning client: the controller may arrive after the PlayerState, so the HUD is also created from here. */
+	virtual void NotifyControllerChanged() override;
+
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 protected:
@@ -59,6 +63,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
 	TArray<TSubclassOf<UGameplayEffect>> StartupEffects;
 
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UAbilityForgeHUDWidget> HUDWidgetClass;
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 private:
 	void InitAbilityActorInfo();
 
@@ -67,6 +76,11 @@ private:
 	void OnAbilityInputReleased(int32 InputID);
 
 	void ApplyStartupEffects();
+
+	void CreateHUD();
+
+	UPROPERTY()
+	TObjectPtr<UAbilityForgeHUDWidget> HUDWidget;
 
 	/** Owned by the PlayerState; cached here once actor info is initialized. */
 	TWeakObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;

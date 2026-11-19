@@ -13,6 +13,8 @@ public class AbilityForge : ModuleRules
 			"Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput",
 			// Gameplay Ability System
 			"GameplayAbilities", "GameplayTags", "GameplayTasks",
+			// HUD widget
+			"UMG",
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

@@ -22,4 +22,7 @@ namespace AbilityForgeTags
 
 	// Gameplay Events
 	ABILITYFORGE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Melee_Hit);
+
+	// Gameplay Cues
+	ABILITYFORGE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Hit);
 }

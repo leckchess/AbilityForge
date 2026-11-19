@@ -69,3 +69,11 @@ Test: each dash costs 20 stamina, and you can't dash again for 1.5 seconds or wi
 Test: attack the dummy, and dash to see the dash animation. Its health text drops by the curve value for your level. It resets after 2 seconds at 0.
 
 **Assignment 3 (stun):** create `GE_Stun` with **Has Duration** 1.5 s and **Grant Tags to Target Actor** `State.Stunned`. While stunned, Dash and Melee can't activate. The solution branch adds an **On Hit Effect Class** to `GA_Melee` for it.
+
+## Section 8: Gameplay Cues and UI
+
+1. **Hit cue.** Create a Blueprint class with parent `GameplayCueNotify_Static`, named `GC_Hit`, in `Content/Abilities/Cues`. Set **Gameplay Cue Tag** to `GameplayCue.Hit`. It must be in `Content/Abilities/Cues`, the cue path set in `DefaultGame.ini`. Override **On Execute**: spawn an effect or play a sound at **Parameters > Location** (`NS_JumpPad` from LevelPrototyping works as a placeholder). Return true.
+2. **HUD.** Create a Widget Blueprint `Content/Abilities/UI/WBP_HUD` and set its parent class (**Graph > Class Settings**) to `AbilityForgeHUDWidget`. Add two **Progress Bars** named exactly `HealthBar` and `StaminaBar`.
+3. `BP_ThirdPersonCharacter`: set **HUD Widget Class** to `WBP_HUD`.
+
+Test: the cue plays on every hit, and the stamina bar drops on each dash.

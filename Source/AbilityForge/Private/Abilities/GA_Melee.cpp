@@ -5,6 +5,8 @@
 #include "Core/AbilityForgeGameplayTags.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/World.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 
 UGA_Melee::UGA_Melee()
 {
@@ -111,6 +113,26 @@ void UGA_Melee::TraceForHits()
 
 		if (ApplyDamageToTarget(Target, DamageAmount))
 		{
+			ExecuteHitCue(Target, Hit);
 		}
 	}
+}
+
+void UGA_Melee::ExecuteHitCue(AActor* Target, const FHitResult& Hit) const
+{
+	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Target);
+	if (!TargetASC)
+	{
+		return;
+	}
+
+	FGameplayCueParameters CueParams;
+	// A sweep that starts inside the target has no useful impact point.
+	CueParams.Location = Hit.bStartPenetrating ? FVector(Target->GetActorLocation()) : FVector(Hit.ImpactPoint);
+	CueParams.Normal = Hit.ImpactNormal;
+	CueParams.Instigator = GetAvatarActorFromActorInfo();
+	CueParams.EffectCauser = GetAvatarActorFromActorInfo();
+
+	// Execute is one-shot (no Add/Remove). Called on the server, it plays on every client.
+	TargetASC->ExecuteGameplayCue(AbilityForgeTags::GameplayCue_Hit, CueParams);
 }
