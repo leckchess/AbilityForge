@@ -11,4 +11,10 @@ namespace AbilityForgeTags
 	// States granted while an ability or effect is active
 	ABILITYFORGE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Dashing);
 	ABILITYFORGE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Stunned);
+
+	// Cooldowns
+	ABILITYFORGE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Cooldown_Dash);
+
+	// SetByCaller magnitudes
+	ABILITYFORGE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Data_Damage);
 }

@@ -10,6 +10,7 @@
 class UAbilitySystemComponent;
 class UGameplayAbility;
 class UInputAction;
+class UGameplayEffect;
 
 /** An ability granted at startup, and the input action that activates it. */
 USTRUCT(BlueprintType)
@@ -50,12 +51,22 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
 	TArray<FAbilityForgeAbilityBinding> StartupAbilities;
 
+	/** Instant effect that sets the starting Health and Stamina. */
+	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
+	TSubclassOf<UGameplayEffect> DefaultAttributesEffect;
+
+	/** Effects applied once at startup, for example stamina regeneration. */
+	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
+	TArray<TSubclassOf<UGameplayEffect>> StartupEffects;
+
 private:
 	void InitAbilityActorInfo();
 
 	void GrantStartupAbilities();
 	void OnAbilityInputPressed(int32 InputID);
 	void OnAbilityInputReleased(int32 InputID);
+
+	void ApplyStartupEffects();
 
 	/** Owned by the PlayerState; cached here once actor info is initialized. */
 	TWeakObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
