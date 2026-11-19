@@ -4,6 +4,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "TimerManager.h"
 #include "Core/AbilityForgeGameplayTags.h"
+#include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 
 UGA_Dash::UGA_Dash()
 {
@@ -16,6 +17,7 @@ UGA_Dash::UGA_Dash()
 
 	// The dash can't start while the owner has any of these.
 	ActivationBlockedTags.AddTag(AbilityForgeTags::State_Stunned);
+	ActivationBlockedTags.AddTag(AbilityForgeTags::State_Attacking);
 }
 
 bool UGA_Dash::CanActivateAbility(
@@ -61,6 +63,19 @@ void UGA_Dash::ActivateAbility(
 	const FVector Direction = Character->GetActorForwardVector().GetSafeNormal2D();
 	Character->LaunchCharacter(Direction * DashStrength, true, false);
 
+	// With a montage, the animation decides how long the dash lasts.
+	if (DashMontage)
+	{
+		UAbilityTask_PlayMontageAndWait* PlayMontage = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(
+			this, NAME_None, DashMontage);
+		PlayMontage->OnCompleted.AddDynamic(this, &UGA_Dash::OnDashMontageFinished);
+		PlayMontage->OnBlendOut.AddDynamic(this, &UGA_Dash::OnDashMontageFinished);
+		PlayMontage->OnInterrupted.AddDynamic(this, &UGA_Dash::OnDashMontageCancelled);
+		PlayMontage->OnCancelled.AddDynamic(this, &UGA_Dash::OnDashMontageCancelled);
+		PlayMontage->ReadyForActivation();
+		return;
+	}
+
 	GetWorld()->GetTimerManager().SetTimer(DashTimerHandle, this, &UGA_Dash::FinishDash, DashDuration, false);
 }
 
@@ -82,4 +97,14 @@ void UGA_Dash::EndAbility(
 void UGA_Dash::FinishDash()
 {
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+}
+
+void UGA_Dash::OnDashMontageFinished()
+{
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+}
+
+void UGA_Dash::OnDashMontageCancelled()
+{
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, true);
 }
